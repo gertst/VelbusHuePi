@@ -56,6 +56,8 @@ class Hue {
 	getGroupState(groupId) {
 		const vhttp = require('http');
 
+		this.groupId = groupId;
+
 		var options = {
 			hostname: this.ip,
 			port: 80,
@@ -77,6 +79,9 @@ class Hue {
 				console.log("all on: " + groupState.state.all_on);
 				console.log("bri: " + groupState.action.bri);
 				console.log("ct: " + groupState.action.ct);
+				//switch state
+				self.setGroupAction(self.groupId, {"on": !groupState.state.all_on});
+
 			});
 		}).end();
 	}

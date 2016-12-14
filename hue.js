@@ -53,10 +53,18 @@ class Hue {
 	}
 
 	///api/E5xHhc9ZROHP0aRT24Ka6CANmwsRG5C9Zb1p6PmT/groups/2
-	getGroupState(groupId) {
+	/**
+	 * Returns a groupState in a callback function
+	 * Used in this.SwitchGroup
+	 * @param groupId
+	 * @param callback functions has params groupId and groupState.
+	 * groupState is JSON like this:
+	 * {"name":"Kitchen","lights":["3","4","5","6"],"type":"Room","state":{"all_on":false,"any_on":false},"class":"Kitchen","action":{"on":false,"bri":224,"ct":343,"alert":"select","colormode":"ct"}}
+	 */
+	getGroupState(groupId, callback) {
 		const vhttp = require('http');
 
-		this.groupId = groupId;
+		//this.groupId = groupId;
 
 		var options = {
 			hostname: this.ip,
@@ -76,11 +84,8 @@ class Hue {
 			  // at this point, `body` has the entire request body stored in it as a string
 				//console.log(body);
 				let groupState = JSON.parse(body);
-				console.log("all on: " + groupState.state.all_on);
-				console.log("bri: " + groupState.action.bri);
-				console.log("ct: " + groupState.action.ct);
-				//switch state
-				self.setGroupAction(self.groupId, {"on": !groupState.state.all_on});
+				//console.log("groupState: " + body);
+				callback(self.groupId, groupState);
 
 			});
 		}).end();
@@ -130,7 +135,9 @@ class Hue {
 	}
 
 	switchGroup(groupId) {
-		this.getGroupState(groupId);
+		this.getGroupState(groupId, (groupId, groupState) =>  {
+			this.setGroupAction(groupId, {"on": !groupState.state.all_on});
+		});
 	}
 
 }

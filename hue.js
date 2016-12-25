@@ -5,7 +5,7 @@
  */
 
 let axios = require('axios');
-let SunCalc = require('suncalc');
+
 
 class Hue {
 
@@ -17,8 +17,7 @@ class Hue {
 
 		this.getBridgeIp();
 
-		var times = SunCalc.getTimes(new Date(), 51.5, -0.1);
-		console.log(times);
+
 
 	}
 
@@ -92,7 +91,7 @@ class Hue {
 	}
 
 	/**
-	 * http://192.168.0.170/api/E5xHhc9ZROHP0aRT24Ka6CANmwsRG5C9Zb1p6PmT/lights/2/state
+	 * http://192.168.1.170/api/E5xHhc9ZROHP0aRT24Ka6CANmwsRG5C9Zb1p6PmT/lights/2/state
 	 * @param lightId
 	 */
 	setLightAction(lightId, state) {
@@ -134,9 +133,12 @@ class Hue {
 		}).end(JSON.stringify(actionJson));
 	}
 
-	switchGroup(groupId) {
+	switchGroup(groupId, callback) {
 		this.getGroupState(groupId, (groupId, groupState) =>  {
 			this.setGroupAction(groupId, {"on": !groupState.state.all_on});
+			if (callback) {
+				callback(groupState);
+			}
 		});
 	}
 

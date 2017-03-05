@@ -6,22 +6,25 @@ class Velbus  {
 
 	static get EVT_BUTTON_PRESSED () {return "EVT_BUTTON_PRESSED"};
 
+
+	//public port;
+
 	constructor(serialPort) {
 		let self = this;
 
 		this.emitter = new EventEmitter();
 
-		let port = new SerialPort(serialPort, {
+		this.port = new SerialPort(serialPort, {
 			baudRate: 9600
 		});
 
 
 		// open errors will be emitted as an error event
-		port.on('error', function (err) {
+		this.port.on('error', function (err) {
 			console.log('Velbus: Serial ERROR :: ', err.message);
 		})
 
-		port.on('data', function (data) {
+		this.port.on('data', function (data) {
 			console.log(data); //
 			let buffer = new VelbusBuffer(data);
 
@@ -37,6 +40,11 @@ class Velbus  {
 		// 	console.log("on open::");
 		// 	port.write(bufAllesUit);
 		// });
+	}
+
+	command(hexBuffer) {
+		//console.log("command: " + hexBuffer);
+		this.port.write(hexBuffer);
 	}
 }
 

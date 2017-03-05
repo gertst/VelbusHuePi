@@ -3,6 +3,7 @@ class VelbusBuffer {
 	static get COMMAND_BUTTON() { return 0x00 };
 
 	constructor (buffer) {
+		this.buffer = buffer;
 		this.priority = buffer[1];
 		this.address = buffer[2];
 		this.dataLength = buffer[3];
@@ -18,8 +19,20 @@ class VelbusBuffer {
 		return this;
 	}
 
+	toHex() {
+		let s = "";
+		for (var i = 0; i <  this.buffer.length; i++) {
+			let v = this.buffer[i].toString(16);
+			if (v.length == 1) {
+				v =+ "0";
+			}
+			s += v;
+		}
+		return s
+	}
+
 	toString() {
-		return "addr: " + this.address + ", data: " + this.data;
+		return "addr: " + this.address + ", data: " + this.data + " hex: " + this.toHex();
 	}
 
 }

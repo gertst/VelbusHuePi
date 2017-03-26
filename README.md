@@ -1,4 +1,4 @@
-###Integration between Velleman Velbus home automation and Philips Hue, using a Raspberry Pi
+#Integration between Velleman Velbus home automation and Philips Hue, using a Raspberry Pi
 
 WIP, Working Alpha version
 
